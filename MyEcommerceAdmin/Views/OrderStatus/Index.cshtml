@@ -1,0 +1,48 @@
+﻿@model System.Data.DataTable
+
+@{
+    ViewBag.Title = "Order Status";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Order Status</h2>
+<hr />
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-striped">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Order Date</th>
+                <th>Order Amount</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (System.Data.DataRow row in Model.Rows)
+            {
+                <tr>
+                    <td>@row["OrderID"]</td>
+                    <td>@row["OrderDate"]</td>
+                    <td>@row["OrderAmount"]</td>
+                    <td>@row["Status"]</td>
+                    <td>
+                        @if (row["Status"].ToString() == "Pending")
+                        {
+                            <form action="@Url.Action("Approve", new { id = row["OrderID"] })" method="post" style="display:inline;">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-success">Approve</button>
+                            </form>
+                            <form action="@Url.Action("Cancel", new { id = row["OrderID"] })" method="post" style="display:inline;">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-danger">Cancel</button>
+                            </form>
+
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
